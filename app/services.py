@@ -2,6 +2,7 @@ from .models import Order, Courier, OrderStates
 
 class OrdersService:
     order_not_found = "Order not found in base."
+    incorrect_data = "Incorrect data"
 
     @staticmethod
     def get_all_orders():
@@ -10,16 +11,19 @@ class OrdersService:
 
     @staticmethod
     def create(new_order):
-        order = Order()
-        order.state = OrderStates.new.value
-        order.target_address = new_order.target_address
-        order.meeting_place = new_order.meeting_place
-        order.meeting_time = new_order.meeting_time
-        order.item = new_order.item
-        order.item_sender = new_order.item_sender
-        order.courier = new_order.courier
-        order.item_receiver = new_order.item_receiver
-        order.save()
+        if new_order != None:
+            order = Order()
+            order.state = OrderStates.new.value
+            order.target_address = new_order.target_address
+            order.meeting_place = new_order.meeting_place
+            order.meeting_time = new_order.meeting_time
+            order.item = new_order.item
+            order.item_sender = new_order.item_sender
+            order.courier = new_order.courier
+            order.item_receiver = new_order.item_receiver
+            order.save()
+            return "Successfully created new order!"
+        return OrdersService.incorrect_data
     
     @staticmethod
     def get_order_by_id(id):
@@ -61,15 +65,18 @@ class CouriersService:
 
     @staticmethod
     def create(new_courier):
-        courier = new_courier
-        courier.first_name = new_courier.first_name
-        courier.second_name = new_courier.second_name
-        courier.last_name = new_courier.last_name
-        courier.phone_number = new_courier.phone_number
-        courier.save()
+        if new_courier != None:
+            courier = new_courier
+            courier.first_name = new_courier.first_name
+            courier.second_name = new_courier.second_name
+            courier.last_name = new_courier.last_name
+            courier.phone_number = new_courier.phone_number
+            courier.save()
+            return "Successfully added new courier!"
+        return CouriersService.incorrect_data
             
     @staticmethod
-    def edit_get(id):
+    def get_courier_by_id(id):
         try:
             courier = Courier.objects.get(id=id)
             return courier
